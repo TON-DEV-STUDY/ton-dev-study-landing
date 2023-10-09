@@ -29,11 +29,14 @@ DynamicAdapt.prototype.init = function () {
         function (item) {
             return '(' + this.type + '-width: ' + item.breakpoint + 'px),' + item.breakpoint;
         },
-        this
+        this,
     );
-    this.mediaQueries = Array.prototype.filter.call(this.mediaQueries, function (item, index, self) {
-        return Array.prototype.indexOf.call(self, item) === index;
-    });
+    this.mediaQueries = Array.prototype.filter.call(
+        this.mediaQueries,
+        function (item, index, self) {
+            return Array.prototype.indexOf.call(self, item) === index;
+        },
+    );
     for (let i = 0; i < this.mediaQueries.length; i++) {
         const media = this.mediaQueries[i];
         const mediaSplit = String.prototype.split.call(media, ',');
@@ -152,7 +155,13 @@ const isMobile = {
         return navigator.userAgent.match(/IEMobile/i);
     },
     any: function () {
-        return isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows();
+        return (
+            isMobile.Android() ||
+            isMobile.BlackBerry() ||
+            isMobile.iOS() ||
+            isMobile.Opera() ||
+            isMobile.Windows()
+        );
     },
 };
 
@@ -172,10 +181,10 @@ if (iconMenu) {
 
 document.addEventListener('DOMContentLoaded', function () {
     const programLessonsElements = document.querySelectorAll('.program__lessons');
-    
+
     programLessonsElements.forEach(function (programLessonsElement) {
         const lessonElements = programLessonsElement.querySelectorAll('.program__lesson');
-        
+
         lessonElements.forEach(function (lessonElement) {
             const showMoreButton = lessonElement.querySelector('.lesson-program__show-more');
             const detailElement = lessonElement.querySelector('.lesson-program__detail');
@@ -185,18 +194,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     lessonElements.forEach(function (otherLessonElement) {
                         if (otherLessonElement !== lessonElement) {
                             otherLessonElement.classList.remove('active');
-                            const otherDetailElement = otherLessonElement.querySelector('.lesson-program__detail');
+                            const otherDetailElement =
+                                otherLessonElement.querySelector('.lesson-program__detail');
                             if (otherDetailElement) {
                                 otherDetailElement.style.display = 'none';
                             }
                         }
                     });
                 }
-                
+
                 lessonElement.classList.toggle('active');
                 showMoreButton.classList.toggle('active');
                 detailElement.classList.toggle('active');
-                
+
                 const rotateDeg = lessonElement.classList.contains('active') ? '180deg' : '0deg';
                 showMoreButton.style.transition = 'transform 0.3s ease';
                 showMoreButton.style.transform = `rotate(${rotateDeg})`;
@@ -215,7 +225,7 @@ function scrollToElement(elementId, duration) {
     }
 
     const startPosition = window.pageYOffset;
-    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset
+    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
     const distance = targetPosition - startPosition;
     const startTime = performance.now();
 
@@ -248,60 +258,3 @@ document.addEventListener('click', function (event) {
         scrollToElement(targetId, duration);
     }
 });
-
-
-// Проверка на @ в #telegram-input
-
-// const courseForm = document.getElementById("course-form");
-
-// courseForm.addEventListener("submit", function (e) {
-//      e.preventDefault();
-// })
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     const courseForm = document.getElementById("course-form");
-    // const telegramInput = document.getElementById("telegram-input");
-    // const telegramErrorText = document.getElementById("telegram-error-text");
-
-    // function validateTelegram() {
-    //     const value = telegramInput.value;
-
-    //     if (value.includes("@")) {
-    //         telegramInput.classList.remove("error");
-    //         telegramErrorText.textContent = "";
-    //     } else {
-    //         telegramInput.classList.add("error");
-    //         telegramErrorText.textContent = "Введите корректный ник";
-    //     }
-    // }
-
-    // telegramInput.addEventListener("input", validateTelegram);
-
-    // courseForm.addEventListener("submit", function (e) {
-    //     e.preventDefault();
-
-    //     if (!telegramInput.value.includes("@")) {
-    //         validateTelegram();
-    //     } else {
-    //         const formData = new FormData(courseForm);
-    //         const name = formData.get("name");
-    //         const username = formData.get("username");
-
-    //         fetch("https://seahorse-app-5w7ll.ondigitalocean.app/send", {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json"
-    //             },
-    //             body: JSON.stringify({ name, username })
-    //         })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             console.log(data);
-    //             courseForm.reset();
-    //         })
-    //         .catch(error => {
-    //             console.error(error);
-    //         });
-    //     }
-    // });
-// });

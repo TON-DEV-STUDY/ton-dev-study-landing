@@ -557,6 +557,7 @@
                                     placeholder="Имя"
                                     class="course__input"
                                     name="name"
+                                    id="name-input"
                                 />
                                 <input
                                     type="text"
@@ -603,102 +604,116 @@
         <script src="js/script.js"></script>
         <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
         <script>
-            const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-                manifestUrl: 'https://gist.github.com/anovic123/9ff99c31c8e7e8a4d981ffc78ac81588.txt',
+            const courseForm = document.getElementById('course-form');
+
+            courseForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                handleSubmit();
             });
 
-            const courseForm = document.getElementById("course-form");
+            const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+                manifestUrl:
+                    'https://gist.github.com/anovic123/9ff99c31c8e7e8a4d981ffc78ac81588.txt',
+            });
 
-            courseForm.addEventListener("submit", function (e) {
-                e.preventDefault();
-            })
+            const telegramInput = document.getElementById('telegram-input');
+            const telegramErrorText = document.getElementById('telegram-error-text');
 
-            async function connectToWallet() {
+            telegramInput.addEventListener('input', validateTelegram);
+
+            function validateTelegram() {
+                const nameValue = document.getElementById('name-input').value;
+                const usernameValue = telegramInput.value;
+
+                if (nameValue.trim() === '' || usernameValue.trim() === '') {
+                    telegramInput.classList.add('error');
+                    telegramErrorText.textContent = 'Заполните все поля';
+                    return false;
+                } else if (usernameValue.includes('@')) {
+                    telegramInput.classList.remove('error');
+                    telegramErrorText.textContent = '';
+                    return true;
+                } else {
+                    telegramInput.classList.add('error');
+                    telegramErrorText.textContent = 'Введите корректный ник';
+                    return false;
+                }
+            }
+
+            async function handleSubmit() {
+                if (!validateTelegram()) {
+                    return;
+                }
+
                 try {
                     const connectedWallet = await tonConnectUI.connectWallet();
                     console.log(connectedWallet);
 
-                    const telegramInput = document.getElementById('telegram-input');
-                    const telegramErrorText = document.getElementById('telegram-error-text');
                     const formData = new FormData(courseForm);
                     const name = formData.get('name');
                     const username = formData.get('username');
-
-                    function validateTelegram() {
-                        const value = telegramInput.value;
-
-                        if (value.includes('@')) {
-                            telegramInput.classList.remove('error');
-                            telegramErrorText.textContent = '';
-                        } else {
-                            telegramInput.classList.add('error');
-                            telegramErrorText.textContent = 'Введите корректный ник';
-                        }
-                    }
-
-                    telegramInput.addEventListener('input', validateTelegram);
-
-                    courseForm.addEventListener('submit', function (e) {
-                        e.preventDefault();
-
-                        if (!telegramInput.value.includes('@')) {
-                            validateTelegram();
-                        } else {
-                            const formData = new FormData(courseForm);
-                            const name = formData.get('name');
-                            const username = formData.get('username');
-
-                            fetch('https://seahorse-app-5w7ll.ondigitalocean.app/send', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ name, username }),
-                            })
-                                .then((response) => response.json())
-                                .then((data) => {
-                                    console.log(data);
-                                    courseForm.reset();
-                                })
-                                .catch((error) => {
-                                    console.error(error);
-                                });
-                        }
-                    });
-                    
 
                     const transaction = {
                         validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
                         messages: [
                             {
                                 address: "EQCcCpBlQXlaZMIKgMnLBHzUEJj0Cl2ZKadyabm_yjl8Hi-K",
-                                amount: "10000000000",
-                                payload: username
-                            }
-                        ]
+                                amount: '10000000000',
+                                payload: username,
+                            },
+                        ],
+                    };
+
+                    const result = await connector.sendTransaction(transaction);
+
+                    // you can use signed boc to find the transaction 
+                    const someTxData = await myAppExplorerService.getTransaction(result.boc);
+                    alert('Transaction was sent successfully', someTxData);
+
+                    fetch('https://seahorse-app-5w7ll.ondigitalocean.app/send', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name, username }),
+                    })
+                        .then(() => {
+                            courseForm.reset();
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+
+                    await tonConnectUI.disconnect();
+                } catch (error) {
+                    if (error) {
+                        alert(
+                            'You rejected the transaction. Please confirm it to send to the blockchain',
+                        );
+                    } else {
+                        alert('Unknown error happened', error);
                     }
 
-                    try {
-                        const result = await connector.sendTransaction(transaction);
-                        
-                        // you can use signed boc to find the transaction 
-                        const someTxData = await myAppExplorerService.getTransaction(result.boc);
-                        alert('Transaction was sent successfully', someTxData);
-                    } catch (e) {
-                        if (e instanceof UserRejectedError) {
-                            alert('You rejected the transaction. Please confirm it to send to the blockchain');
-                        } else {
-                            alert('Unknown error happened', e);
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error connecting to wallet:', error);
+                    const formData = new FormData(courseForm);
+                    const name = formData.get('name');
+                    const username = formData.get('username');
+                    fetch('https://seahorse-app-5w7ll.ondigitalocean.app/send', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name, username }),
+                    })
+                        .then(() => {
+                            courseForm.reset();
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
+
+                    await tonConnectUI.disconnect();
                 }
             }
-
-            document
-                .getElementById('ton-connect-button')
-                .addEventListener('click', connectToWallet);
         </script>
     </body>
 </html>
