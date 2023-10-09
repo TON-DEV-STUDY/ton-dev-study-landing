@@ -2,7 +2,10 @@
 <html lang="ru">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+        />
         <meta name="description" content="Описание" />
         <meta name="keywords" content="Ключевики" />
         <meta name="author" content="Автор" />
@@ -549,17 +552,23 @@
                                 Стоимость — 10 TON (только на этот поток)
                             </p>
                             <form class="course__form" id="course-form">
-                                <input type="text" placeholder="Имя" class="course__input" />
+                                <input
+                                    type="text"
+                                    placeholder="Имя"
+                                    class="course__input"
+                                    name="name"
+                                />
                                 <input
                                     type="text"
                                     placeholder="Ник в Telegram"
                                     class="course__input"
                                     id="telegram-input"
+                                    name="username"
                                 />
                                 <div class="course__input-error" id="telegram-error-text"></div>
-                                <a href="https://tonenotbot.t.me" class="course__submit" target="_blank">
-                                    ОПЛАТИТЬ КУРС
-                                </a>
+                                <button class="course__submit" id="ton-connect-button">
+                                    ОПЛТАТИТЬ КУРС
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -592,5 +601,78 @@
         </div>
 
         <script src="js/script.js"></script>
+        <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+        <script>
+            const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+                manifestUrl: 'https://gist.github.com/anovic123/9ff99c31c8e7e8a4d981ffc78ac81588.txt',
+            });
+
+            const courseForm = document.getElementById("course-form");
+
+            courseForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+            })
+
+            async function connectToWallet() {
+                try {
+                    const connectedWallet = await tonConnectUI.connectWallet();
+                    console.log(connectedWallet);
+
+                    const telegramInput = document.getElementById('telegram-input');
+                    const telegramErrorText = document.getElementById('telegram-error-text');
+                    const formData = new FormData(courseForm);
+                    const name = formData.get('name');
+                    const username = formData.get('username');
+
+                    function validateTelegram() {
+                        const value = telegramInput.value;
+
+                        if (value.includes('@')) {
+                            telegramInput.classList.remove('error');
+                            telegramErrorText.textContent = '';
+                        } else {
+                            telegramInput.classList.add('error');
+                            telegramErrorText.textContent = 'Введите корректный ник';
+                        }
+                    }
+
+                    telegramInput.addEventListener('input', validateTelegram);
+
+                    courseForm.addEventListener('submit', function (e) {
+                        e.preventDefault();
+
+                        if (!telegramInput.value.includes('@')) {
+                            validateTelegram();
+                        } else {
+                            const formData = new FormData(courseForm);
+                            const name = formData.get('name');
+                            const username = formData.get('username');
+
+                            fetch('https://seahorse-app-5w7ll.ondigitalocean.app/send', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ name, username }),
+                            })
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    console.log(data);
+                                    courseForm.reset();
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                });
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error connecting to wallet:', error);
+                }
+            }
+
+            document
+                .getElementById('ton-connect-button')
+                .addEventListener('click', connectToWallet);
+        </script>
     </body>
 </html>

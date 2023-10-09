@@ -252,29 +252,56 @@ document.addEventListener('click', function (event) {
 
 // Проверка на @ в #telegram-input
 
-document.addEventListener("DOMContentLoaded", function () {
-    const courseForm = document.getElementById("course-form");
-    const telegramInput = document.getElementById("telegram-input");
-    const telegramErrorText = document.getElementById("telegram-error-text");
+// const courseForm = document.getElementById("course-form");
 
-    function validateTelegram() {
-        const value = telegramInput.value;
+// courseForm.addEventListener("submit", function (e) {
+//      e.preventDefault();
+// })
 
-        if (value.includes("@")) {
-            telegramInput.classList.remove("error");
-            telegramErrorText.textContent = "";
-        } else {
-            telegramInput.classList.add("error");
-            telegramErrorText.textContent = "Введите корректный ник";
-        }
-    }
+// document.addEventListener("DOMContentLoaded", function () {
+//     const courseForm = document.getElementById("course-form");
+    // const telegramInput = document.getElementById("telegram-input");
+    // const telegramErrorText = document.getElementById("telegram-error-text");
 
-    telegramInput.addEventListener("input", validateTelegram);
+    // function validateTelegram() {
+    //     const value = telegramInput.value;
 
-    courseForm.addEventListener("submit", function (e) {
-        if (!telegramInput.value.includes("@")) {
-            e.preventDefault();
-            validateTelegram();
-        }
-    });
-});
+    //     if (value.includes("@")) {
+    //         telegramInput.classList.remove("error");
+    //         telegramErrorText.textContent = "";
+    //     } else {
+    //         telegramInput.classList.add("error");
+    //         telegramErrorText.textContent = "Введите корректный ник";
+    //     }
+    // }
+
+    // telegramInput.addEventListener("input", validateTelegram);
+
+    // courseForm.addEventListener("submit", function (e) {
+    //     e.preventDefault();
+
+    //     if (!telegramInput.value.includes("@")) {
+    //         validateTelegram();
+    //     } else {
+    //         const formData = new FormData(courseForm);
+    //         const name = formData.get("name");
+    //         const username = formData.get("username");
+
+    //         fetch("https://seahorse-app-5w7ll.ondigitalocean.app/send", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify({ name, username })
+    //         })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log(data);
+    //             courseForm.reset();
+    //         })
+    //         .catch(error => {
+    //             console.error(error);
+    //         });
+    //     }
+    // });
+// });
