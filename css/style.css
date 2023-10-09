@@ -170,20 +170,12 @@ main {
     letter-spacing: 0.84px;
     transition: all 0.3s ease 0s;
     text-transform: uppercase;
+    cursor: pointer;
 }
-.header-burger__link:after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    right: 50%;
-    bottom: -2px;
-    background-color: #0088cc;
-    height: 2px;
-    transition: all 0.3s ease-out;
-}
-.header-burger__link:hover:after {
-    right: 0;
-    left: 0;
+@media (min-width: 768px) {
+    .header-burger__link:hover {
+        color: #41a4df;
+    }
 }
 .menu-burger__icon {
 }
@@ -394,7 +386,6 @@ main {
     max-height: 285px;
 }
 
-
 @media (max-width: 1050px) {
     .hero__container {
         padding-bottom: 200px;
@@ -491,23 +482,13 @@ main {
     line-height: 160%;
 }
 .info__link {
-    position: relative;
     color: #08c;
+    cursor: pointer;
     transition: all 0.3s ease 0s;
 }
-.info__link::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    right: 50%;
-    bottom: -1px;
-    background-color: #41a4df;
-    height: 2px;
-    transition: all 0.3s ease-out;
-}
-.info__link:hover::after {
-    right: 0;
-    left: 0;
+.info__link:hover {
+    color: #41a4df;
+    text-decoration: underline;
 }
 
 @media (max-width: 1024px) {
@@ -639,23 +620,13 @@ main {
     line-height: 170%;
 }
 .lesson-program__link {
-    position: relative;
     color: #08c;
+    cursor: pointer;
     transition: all 0.3s ease 0s;
 }
-.lesson-program__link::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    right: 50%;
-    bottom: -1px;
-    background-color: #41a4df;
-    height: 2px;
-    transition: all 0.3s ease-out;
-}
-.lesson-program__link:hover::after {
-    right: 0;
-    left: 0;
+.lesson-program__link:hover {
+    text-decoration: underline;
+    color: #41a4df;
 }
 .lesson-program__show-more {
     display: flex;
@@ -747,7 +718,7 @@ main {
         margin-top: 10px;
     }
     .lesson-program__count-lesson:before {
-        content: '';
+        display: none;
     }
     .lesson-program__author {
         font-size: 11px;
@@ -1169,21 +1140,13 @@ main {
 }
 .footer__link {
     display: block;
-    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
 }
-.footer__link:after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    right: 50%;
-    bottom: -3px;
-    background-color: #0088cc;
-    height: 2px;
-    transition: all 0.3s ease-out;
-}
-.footer__link:hover:after {
-    right: 0;
-    left: 0;
+@media (min-width: 768px) {
+    .footer__link:hover {
+        color: #41a4df;
+    }
 }
 .footer__logo {
     display: flex;
