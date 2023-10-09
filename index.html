@@ -687,6 +687,7 @@
                     await tonConnectUI.disconnect();
                 } catch (error) {
                     if (error) {
+                        console.log(error)
                         alert(
                             'You rejected the transaction. Please confirm it to send to the blockchain',
                         );
