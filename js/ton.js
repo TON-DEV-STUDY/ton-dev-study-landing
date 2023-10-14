@@ -109,7 +109,7 @@ async function handleSubmit() {
     }
 
     
-    fetch('https://seahorse-app-5w7ll.ondigitalocean.app/send', {
+    fetch('https://scenic-helper-401908.de.r.appspot.com/send', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
