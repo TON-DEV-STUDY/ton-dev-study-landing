@@ -381,7 +381,7 @@ main {
     bottom: 0;
 }
 .hero__img > img {
-    display: none;
+    /* display: none; */
     max-width: 764px;
     max-height: 285px;
 }
