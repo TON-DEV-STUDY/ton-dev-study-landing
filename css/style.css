@@ -1023,7 +1023,7 @@ main {
 }
 .course__input-error {
     font-size: 14px;
-    color: #e63636;
+    color: #ffffff;
     margin-top: -10px;
 }
 .course__input:not(:last-child) {
