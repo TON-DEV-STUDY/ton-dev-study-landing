@@ -52,7 +52,7 @@ async function getTransactionBuild (username) {
         messages: [
             {
                 address: "UQAXT2kFyCKUT9Hz8tpgbPo8-Qturr_tp_ynSO4juL6N4omn",
-                amount: '10000000000',
+                amount: '50000000000',
                 payload: payload,
             },
         ],
